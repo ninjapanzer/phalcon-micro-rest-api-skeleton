@@ -4,6 +4,7 @@ date_default_timezone_set('UTC');
 
 use Phalcon\Mvc\Micro;
 use Phalcon\Events\Manager as EventsManager;
+use Phalconauth\Token\Jwt as JWT;
 
 define('APPLICATION_ENV', getenv('APPLICATION_ENV') ?: 'development');
 
@@ -14,7 +15,7 @@ if (APPLICATION_ENV === 'development') {
     $debug->listen();
 }
 
-define('APP_PATH', realpath('..'));
+define('APP_PATH', realpath('.'));
 
 try {
 
@@ -34,6 +35,10 @@ try {
      * Include Services.
      */
     include APP_PATH.'/config/services.php';
+
+    $di->setShared('jwt', function(){
+        return new JWT();
+    });
 
     /**
      * Include ACL.
